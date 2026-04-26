@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Logs</title>
+<style>body{font-family:Arial;margin:0;background:#0a1020;color:#fff}header{padding:18px;background:#121c39}main{padding:18px}.log{background:#172447;border:1px solid #28427e;border-radius:8px;padding:10px;margin-bottom:8px}</style></head>
+<body>
+  <header><h1>Logs em tempo real</h1></header>
+  <main><div id="logs"></div></main>
+  <script>
+    const box = document.getElementById('logs');
+    function append(log){
+      const icon = log.level === 'warn' ? '❌' : '✅';
+      const item = document.createElement('div');
+      item.className = 'log';
+      item.textContent = `${icon} [${new Date(log.createdAt || Date.now()).toLocaleTimeString()}] ${log.service}: ${log.message}`;
+      box.prepend(item);
+    }
+    fetch('/api/logs').then(r=>r.json()).then(rows=>rows.forEach(append));
+    const es = new EventSource('/events');
+    es.addEventListener('log', (ev) => append(JSON.parse(ev.data)));
+  </script>
+</body>
+</html>
