@@ -1,0 +1,12 @@
+{
+  "name": "server-ia",
+  "version": "2.0.0",
+  "description": "Servidor modular sem dependências externas, com dashboard, docs e logs",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test"
+  }
+}

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Docs</title>
+<style>body{font-family:Arial;margin:24px;background:#0f1322;color:#fff}code{background:#1c2647;padding:2px 6px;border-radius:6px}pre{background:#1c2647;padding:14px;border-radius:10px;overflow:auto}</style>
+</head>
+<body>
+  <h1>Documentação rápida</h1>
+  <p>Porta padrão: <code>9999</code> (configurável por <code>PORT</code>).</p>
+  <p>Sem dependências externas no Node.js (usa somente módulos nativos).</p>
+  <h2>Instalação</h2>
+  <pre>cp .env.example .env
+npm start</pre>
+  <h2>Termux</h2>
+  <pre>pkg update -y
+pkg install nodejs git -y
+git clone &lt;seu-repo&gt;
+cd Server-ia
+cp .env.example .env
+npm start</pre>
+  <h2>Deploy Render</h2>
+  <pre>Build Command: npm install
+Start Command: npm start
+Environment: PORT=9999 + FIREBASE_DATABASE_URL (+ FIREBASE_DATABASE_SECRET opcional)</pre>
+  <h2>Rotas principais</h2>
+  <ul>
+    <li><code>GET /api/services</code></li>
+    <li><code>POST /api/services/:id/status</code></li>
+    <li><code>POST /api/users/credit</code></li>
+    <li><code>POST /api/games/crash/round</code></li>
+    <li><code>POST /api/games/crash/bet</code></li>
+    <li><code>POST /api/games/crash/cashout</code></li>
+    <li><code>GET /api/stats</code></li>
+    <li><code>GET /api/logs</code></li>
+    <li><code>GET /events</code> (SSE)</li>
+  </ul>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Server IA - Dashboard</title>
+  <style>
+    body { font-family: Inter, Arial, sans-serif; margin: 0; background:#0b1020; color:#fff; }
+    header { padding: 20px; background:#111a33; display:flex; gap:20px; align-items:center; }
+    a { color:#8ec5ff; text-decoration:none; }
+    main { padding:20px; }
+    .grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap:12px; }
+    .card { background:#182341; border-radius:12px; padding:16px; border:1px solid #2c3f73; }
+    .ok { color:#29d17d; }
+    .bad { color:#ff5e78; }
+    button { margin-top:10px; border:none; padding:8px 10px; border-radius:8px; cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Server IA</h1>
+    <a href="/docs">Docs</a>
+    <a href="/logs">Logs</a>
+  </header>
+  <main>
+    <h2>Status dos módulos</h2>
+    <div id="grid" class="grid"></div>
+  </main>
+
+<script>
+  const grid = document.getElementById('grid');
+  async function load() {
+    const res = await fetch('/api/services');
+    const data = await res.json();
+    grid.innerHTML = '';
+    Object.values(data).forEach((svc) => {
+      const icon = svc.status === 'online' ? '✅' : '❌';
+      const klass = svc.status === 'online' ? 'ok' : 'bad';
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `<h3>${svc.name}</h3><p class="${klass}">${icon} ${svc.status}</p><small>${svc.legal}</small>`;
+      const toggle = document.createElement('button');
+      toggle.textContent = svc.status === 'online' ? 'Colocar offline' : 'Colocar online';
+      toggle.onclick = async () => {
+        await fetch(`/api/services/${svc.id}/status`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: svc.status === 'online' ? 'offline' : 'online' })
+        });
+        await load();
+      };
+      card.appendChild(toggle);
+      grid.appendChild(card);
+    });
+  }
+  load();
+</script>
+</body>
+</html>
